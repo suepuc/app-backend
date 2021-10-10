@@ -23,6 +23,7 @@ namespace app_backend.Models
         [Display(Name = "Nome de usuário")]
         public string nomeDeUsuario { get; set; }
 
+        [Display(Name = "Logueado")]
         public bool estaLogueado { get; set; } = true;
 
         public ICollection<Receita> Receitas{ get; set; }

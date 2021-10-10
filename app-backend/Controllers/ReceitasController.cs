@@ -9,22 +9,23 @@ using app_backend.Models;
 
 namespace app_backend.Controllers
 {
-    public class UsuariosController : Controller
+    public class ReceitasController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public UsuariosController(ApplicationDbContext context)
+        public ReceitasController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Usuarios
+        // GET: Receitas
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Usuarios.ToListAsync());
+            var applicationDbContext = _context.Receitas.Include(r => r.Usuario);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Usuarios/Details/5
+        // GET: Receitas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -32,58 +33,42 @@ namespace app_backend.Controllers
                 return NotFound();
             }
 
-            var usuario = await _context.Usuarios
+            var receita = await _context.Receitas
+                .Include(r => r.Usuario)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuario == null)
+            if (receita == null)
             {
                 return NotFound();
             }
 
-            return View(usuario);
-        }
-        
-        // GET: Usuarios/Details/5
-        public async Task<IActionResult> MostrarReceitas(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var usuario = await _context.Usuarios
-                .Include(t=> t.Receitas)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuario == null)
-            {
-                return NotFound();
-            }
-
-            return View(usuario);
+            return View(receita);
         }
 
-        // GET: Usuarios/Create
+        // GET: Receitas/Create
         public IActionResult Create()
         {
+            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "email");
             return View();
         }
 
-        // POST: Usuarios/Create
+        // POST: Receitas/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,senha,email,nomeDeUsuario,estaLogueado")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("Id,UsuarioId,titulo,contadorFavoritos,tempoDePreparo,modoDePreparo,dataDeCriacao")] Receita receita)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(usuario);
+                _context.Add(receita);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(usuario);
+            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "email", receita.UsuarioId);
+            return View(receita);
         }
 
-        // GET: Usuarios/Edit/5
+        // GET: Receitas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -91,22 +76,23 @@ namespace app_backend.Controllers
                 return NotFound();
             }
 
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario == null)
+            var receita = await _context.Receitas.FindAsync(id);
+            if (receita == null)
             {
                 return NotFound();
             }
-            return View(usuario);
+            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "email", receita.UsuarioId);
+            return View(receita);
         }
 
-        // POST: Usuarios/Edit/5
+        // POST: Receitas/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,senha,email,nomeDeUsuario,estaLogueado")] Usuario usuario)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UsuarioId,titulo,contadorFavoritos,tempoDePreparo,modoDePreparo,dataDeCriacao")] Receita receita)
         {
-            if (id != usuario.Id)
+            if (id != receita.Id)
             {
                 return NotFound();
             }
@@ -115,12 +101,12 @@ namespace app_backend.Controllers
             {
                 try
                 {
-                    _context.Update(usuario);
+                    _context.Update(receita);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UsuarioExists(usuario.Id))
+                    if (!ReceitaExists(receita.Id))
                     {
                         return NotFound();
                     }
@@ -131,10 +117,11 @@ namespace app_backend.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(usuario);
+            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "email", receita.UsuarioId);
+            return View(receita);
         }
 
-        // GET: Usuarios/Delete/5
+        // GET: Receitas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -142,30 +129,31 @@ namespace app_backend.Controllers
                 return NotFound();
             }
 
-            var usuario = await _context.Usuarios
+            var receita = await _context.Receitas
+                .Include(r => r.Usuario)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuario == null)
+            if (receita == null)
             {
                 return NotFound();
             }
 
-            return View(usuario);
+            return View(receita);
         }
 
-        // POST: Usuarios/Delete/5
+        // POST: Receitas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
-            _context.Usuarios.Remove(usuario);
+            var receita = await _context.Receitas.FindAsync(id);
+            _context.Receitas.Remove(receita);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UsuarioExists(int id)
+        private bool ReceitaExists(int id)
         {
-            return _context.Usuarios.Any(e => e.Id == id);
+            return _context.Receitas.Any(e => e.Id == id);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,5 +18,23 @@ namespace app_backend.Models
         public int UsuarioId { get; set; }
         [ForeignKey("UsuarioId")]
         public Usuario Usuario { get; set; }
+
+        [Required(ErrorMessage = "Informe o nome da receita!")]
+        [Display(Name = "Nome da Receita")]
+        public string titulo { get; set; }
+
+        [Display(Name = "Curtidas")]
+        public int contadorFavoritos { get; set; } = 0;
+
+        [Required(ErrorMessage = "Informe o tempo aproximado de preparo!")]
+        [Display(Name = "Tempo de Preparo")]
+        public int tempoDePreparo { get; set; }
+
+        [Required(ErrorMessage = "Informe as instruções de preparo!")]
+        [Display(Name = "Instruções de Preparo")]
+        public string modoDePreparo{ get; set; }
+
+        [Display(Name = "Criada em")]
+        public DateTime dataDeCriacao { get; set; } = DateTime.UtcNow;
     }
 }

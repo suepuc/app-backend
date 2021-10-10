@@ -1,0 +1,55 @@
+﻿@model app_backend.Models.Receita
+
+@{
+    ViewData["Title"] = "Minhas Receitas";
+}
+
+<h2>Receitas de @Model.Usuario.nomeDeUsuario</h2>
+
+<div>
+    
+    <hr />
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.titulo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.contadorFavoritos)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.tempoDePreparo)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Usuario.Receitas)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.titulo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.contadorFavoritos)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.tempoDePreparo)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
