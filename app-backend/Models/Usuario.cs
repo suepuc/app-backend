@@ -22,8 +22,7 @@ namespace app_backend.Models
         [Required(ErrorMessage = "Informe o nome!")]
         public string nomeDeUsuario { get; set; }
 
-        [DefaultValue(true)]
-        public bool estaLogueado { get; set; }
+        public bool estaLogueado { get; set; } = true;
 
     }
 }
