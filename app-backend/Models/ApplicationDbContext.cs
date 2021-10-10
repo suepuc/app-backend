@@ -13,5 +13,6 @@ namespace app_backend.Models
         }
 
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Receita> Receitas { get; set; }
     }
 }
