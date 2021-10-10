@@ -27,7 +27,7 @@ namespace app_backend
             services.AddDbContext<Models.ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
-      
+
             services.AddControllersWithViews();
         }
 
