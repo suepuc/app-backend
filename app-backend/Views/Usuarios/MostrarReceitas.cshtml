@@ -1,10 +1,10 @@
-﻿@model app_backend.Models.Receita
+﻿@model app_backend.Models.Usuario
 
 @{
     ViewData["Title"] = "Minhas Receitas";
 }
 
-<h2>Receitas de @Model.Usuario.nomeDeUsuario</h2>
+<h2>Receitas de @Model.nomeDeUsuario</h2>
 
 <div>
     
@@ -14,19 +14,19 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.titulo)
+                        Receita
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.contadorFavoritos)
+                        Curtidas
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.tempoDePreparo)
+                        Tempo de Preparo
                     </th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Usuario.Receitas)
+                @foreach (var item in Model.Receitas.OrderByDescending(c => c.dataDeCriacao))
                 {
                     <tr>
                         <td>
