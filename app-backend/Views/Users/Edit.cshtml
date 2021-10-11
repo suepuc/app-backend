@@ -1,4 +1,4 @@
-﻿@model app_backend.Models.Usuario
+﻿@model app_backend.Models.User
 
 @{
     ViewData["Title"] = "Edit";
@@ -6,7 +6,7 @@
 
 <h1>Edit</h1>
 
-<h4>Usuario</h4>
+<h4>User</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -27,6 +27,11 @@
                 <label asp-for="senha" class="control-label"></label>
                 <input asp-for="senha" class="form-control" type="password" />
                 <span asp-validation-for="senha" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Perfil" class="control-label"></label>
+                <select asp-for="Perfil" class="form-control" asp-items="Html.GetEnumSelectList<Perfil>()"></select>
+                <span asp-validation-for="Perfil" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
