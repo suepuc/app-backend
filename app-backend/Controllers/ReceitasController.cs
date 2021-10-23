@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using app_backend.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace app_backend.Controllers
 {
+    [Authorize]
     public class ReceitasController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -19,6 +21,7 @@ namespace app_backend.Controllers
         }
 
         // GET: Receitas
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Receitas.Include(r => r.Usuario);
@@ -122,13 +125,14 @@ namespace app_backend.Controllers
         }
 
         // GET: Receitas/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
+                        
             var receita = await _context.Receitas
                 .Include(r => r.Usuario)
                 .FirstOrDefaultAsync(m => m.Id == id);

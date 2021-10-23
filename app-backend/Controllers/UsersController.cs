@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using app_backend.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace app_backend.Controllers
 {
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -23,12 +25,14 @@ namespace app_backend.Controllers
         }
 
         //Login
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([Bind("email, senha")] User user)
         {
             var usuario = await _context.Users
@@ -60,7 +64,7 @@ namespace app_backend.Controllers
                 var props = new AuthenticationProperties
                 {
                     AllowRefresh = true,
-                    ExpiresUtc = DateTime.Now.ToLocalTime().AddDays(7),
+                    ExpiresUtc = DateTime.Now.ToLocalTime().AddDays(1),
                     IsPersistent = true
                 };
 
@@ -80,6 +84,7 @@ namespace app_backend.Controllers
             return RedirectToAction("Login", "Users");
         }
 
+        [AllowAnonymous]
         public IActionResult AccessDenied()
         {
             return View();
