@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace app_backend.Controllers
 {
-    [Authorize]
+   
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,14 +25,14 @@ namespace app_backend.Controllers
         }
 
         //Login
-        [AllowAnonymous]
+     
         public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
-        [AllowAnonymous]
+      
         public async Task<IActionResult> Login([Bind("email, senha")] User user)
         {
             var usuario = await _context.Users
@@ -84,7 +84,7 @@ namespace app_backend.Controllers
             return RedirectToAction("Login", "Users");
         }
 
-        [AllowAnonymous]
+      
         public IActionResult AccessDenied()
         {
             return View();
